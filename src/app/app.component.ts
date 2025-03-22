@@ -1,22 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, collectionData, collection } from '@angular/fire/firestore';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
+  imports: [RouterOutlet],
   template: `
     <h1>Activity Tracker</h1>
-    <p>Check the console for Firestore test output.</p>
+    <router-outlet></router-outlet>
   `,
 })
 export class AppComponent implements OnInit {
-  constructor(private firestore: Firestore) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    // Reference a test collection named 'test'
-    const testCollection = collection(this.firestore, 'test');
-    collectionData(testCollection).subscribe(data => {
-      console.log('Firestore data:', data);
-    });
-  }
+  ngOnInit(): void {}
 }
