@@ -20,8 +20,22 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create environment.ts
+        run: |
+          echo "export const environment = {
+            production: false,
+            firebase: {
+              apiKey: '',
+              authDomain: '',
+              projectId: '',
+              storageBucket: '',
+              messagingSenderId: '',
+              appId: '',
+              measurementId: '',
+            }
+          };" > src/environments/environment.ts
+
       - name: Create environment.prod.ts
-        # We echo out a file using the secrets you stored in GitHub
         run: |
           echo "export const environment = {
             production: true,
