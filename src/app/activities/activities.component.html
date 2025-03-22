@@ -1,0 +1,66 @@
+<div class="container mt-4">
+  <h2>Manage Activities</h2>
+
+  <!-- Form for adding new activity -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form (ngSubmit)="addActivity()">
+        <div class="form-group">
+          <label for="activityName">New Activity</label>
+          <input
+            type="text"
+            id="activityName"
+            [(ngModel)]="newActivityName"
+            name="newActivityName"
+            class="form-control"
+            placeholder="Enter activity name"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Add Activity</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- List of activities -->
+  <div class="list-group">
+    <div
+      *ngFor="let activity of activities"
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <div *ngIf="editingActivity !== activity.id; else editTemplate">
+        {{ activity.name }}
+      </div>
+      <ng-template #editTemplate>
+        <input
+          type="text"
+          [(ngModel)]="editActivityName"
+          class="form-control"
+        />
+      </ng-template>
+      <div>
+        <button
+          *ngIf="editingActivity !== activity.id"
+          class="btn btn-secondary btn-sm me-2"
+          (click)="startEditing(activity)"
+        >
+          Edit
+        </button>
+        <button
+          *ngIf="editingActivity === activity.id"
+          class="btn btn-success btn-sm me-2"
+          (click)="saveEdit(activity)"
+        >
+          Save
+        </button>
+        <button
+          *ngIf="editingActivity === activity.id"
+          class="btn btn-warning btn-sm"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

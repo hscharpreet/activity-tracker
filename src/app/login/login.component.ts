@@ -7,10 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <h2>Login</h2>
-    <button (click)="loginWithGoogle()">Login with Google</button>
-  `,
+  templateUrl: './login.component.html',
 })
 export class LoginComponent {
   constructor(private auth: Auth, private router: Router) {}
@@ -20,7 +17,7 @@ export class LoginComponent {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(this.auth, provider);
       console.log('User logged in with Google:', userCredential);
-      // Redirect to home page after login
+      // Redirect to Home after successful login
       this.router.navigate(['/home']);
     } catch (error) {
       console.error('Google login error:', error);
