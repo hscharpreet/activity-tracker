@@ -1,9 +1,48 @@
-<h2>Home</h2>
-<div *ngIf="user; else loading">
-  <p>Welcome, {{ user.displayName || user.email }}!</p>
-  <br /><br />
-  <button class="btn btn-primary" (click)="logout()">Logout</button>
+<div class="container mt-4">
+  <h2>Home</h2>
+  <div class="mb-3">
+    <p>Welcome, {{ user?.displayName || user?.email }}!</p>
+    <button class="btn btn-primary" (click)="logout()">Logout</button>
+  </div>
+
+  <div *ngIf="activeActivity" class="card mb-4">
+    <div class="card-body">
+      <h4>Current Activity: {{ activeActivity.name }}</h4>
+      <p>
+        Current Session Duration:
+        {{ formatDuration(getCurrentDuration(activeActivity)) }}
+      </p>
+      <button class="btn btn-danger" (click)="stopActiveActivity()">
+        Stop Activity
+      </button>
+    </div>
+  </div>
+
+  <h3>Available Activities</h3>
+  <div *ngIf="nonActiveActivities.length > 0; else noActivities">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let activity of nonActiveActivities">
+          <td>{{ activity.name }}</td>
+          <td>
+            <button
+              class="btn btn-success btn-sm"
+              (click)="startActivity(activity)"
+            >
+              Start
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #noActivities>
+    <p>No available activities.</p>
+  </ng-template>
 </div>
-<ng-template #loading>
-  <p>Loading user info...</p>
-</ng-template>
