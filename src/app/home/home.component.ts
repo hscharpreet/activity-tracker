@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../auth/auth.service';
-import { ActivityService, Activity } from '../auth/activity.service';
 import { Subscription, interval } from 'rxjs';
 import { User } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../auth/auth.service';
+import { ActivityService, Activity } from '../auth/activity.service';
+import { UserService } from '../auth/user.service';
 
 @Component({
   selector: 'app-home',
@@ -17,12 +20,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   activeActivity: Activity | null = null;
   nonActiveActivities: Activity[] = [];
   currentTime: number = Date.now();
+  showUID: boolean = false;
   private subs = new Subscription();
   private intervalSub: any;
 
   constructor(
     private authService: AuthService,
-    private activityService: ActivityService
+    private activityService: ActivityService,
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -55,6 +61,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .logout()
       .then(() => {
         console.log('User logged out');
+        this.router.navigate(['/login']);
       })
       .catch((err) => console.error(err));
   }
@@ -62,6 +69,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   startActivity(activity: Activity) {
     this.activityService
       .startActivity(activity.id)
+      .then(() => {
+        return this.userService.updateCurrentActivity({
+          name: activity.name,
+          startTime: Date.now(),
+        });
+      })
       .catch((err) => console.error(err));
   }
 
@@ -69,6 +82,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.activeActivity) {
       this.activityService
         .stopActivity(this.activeActivity)
+        .then(() => {
+          return this.userService.updateCurrentActivity(null);
+        })
         .catch((err) => console.error(err));
     }
   }
@@ -87,5 +103,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     return `${hr.toString().padStart(2, '0')}:${min
       .toString()
       .padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  }
+
+  toggleUID() {
+    this.showUID = !this.showUID;
   }
 }

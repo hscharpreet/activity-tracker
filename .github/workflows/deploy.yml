@@ -59,4 +59,4 @@ jobs:
           git config --global user.email "github-actions@github.com"
 
       - name: Deploy to GitHub Pages
-        run: npx angular-cli-ghpages --dir=dist/activity-tracker/browser --no-silent --repo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/hscharpreet/activity-tracker.git"
+        run: npx angular-cli-ghpages --dir=dist/activity-tracker/browser --no-silent --repo "https://x-access-token:${{ secrets.MY_PAT }}@github.com/hscharpreet/activity-tracker.git"

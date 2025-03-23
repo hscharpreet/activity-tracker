@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <h2>Friends</h2>
+
+  <!-- Form to add a friend -->
+  <div class="mb-3">
+    <h5>Add a Friend</h5>
+    <div class="input-group">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Friend UID"
+        [(ngModel)]="newFriendUid"
+      />
+      <button class="btn btn-primary" (click)="addFriend()">Add Friend</button>
+    </div>
+  </div>
+
+  <!-- Display friends' profiles -->
+  <div *ngIf="friendsProfiles && friendsProfiles.length > 0; else noFriends">
+    <div class="row">
+      <div class="col-md-4 mb-3" *ngFor="let friend of friendsProfiles">
+        <div class="card h-100">
+          <div class="card-body d-flex align-items-center">
+            <img
+              [src]="
+                friend.photoURL
+                  ? friend.photoURL
+                  : 'https://placehold.co/40x40'
+              "
+              class="rounded-circle"
+              alt="Profile"
+              width="40"
+              height="40"
+            />
+            <div class="ms-3">
+              <h5 class="card-title mb-1">
+                {{ friend.displayName || friend.email }}
+              </h5>
+              <div *ngIf="friend.currentActivity; else noActivity">
+                <small>
+                  <strong>Current Activity:</strong>
+                  {{ friend.currentActivity.name }}<br />
+                  <strong>Duration:</strong>
+                  {{ formatDuration(getFriendCurrentDuration(friend)) }}
+                </small>
+              </div>
+              <ng-template #noActivity>
+                <small>No active activity.</small>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noFriends>
+    <p>You have no friends added.</p>
+  </ng-template>
+</div>
