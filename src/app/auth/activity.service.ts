@@ -6,8 +6,9 @@ import {
   doc,
   setDoc,
   updateDoc,
+  deleteDoc,
 } from '@angular/fire/firestore';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
 
 export interface Activity {
@@ -44,6 +45,17 @@ export class ActivityService {
       `users/${user.uid}/activities/${activityId}`
     );
     await updateDoc(activityDoc, { name });
+  }
+
+  async deleteActivity(activityId: string): Promise<void> {
+    const user = this.authService.getCurrentUser();
+    if (!user) throw new Error('User not logged in');
+
+    const activityDoc = doc(
+      this.firestore,
+      `users/${user.uid}/activities/${activityId}`
+    );
+    await deleteDoc(activityDoc);
   }
 
   getActivities(): Observable<Activity[]> {

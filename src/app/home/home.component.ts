@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth/auth.service';
 import { User } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ import { User } from '@angular/fire/auth';
 export class HomeComponent implements OnInit {
   user: User | null = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.authService.user$.subscribe((user) => (this.user = user));
@@ -21,6 +22,7 @@ export class HomeComponent implements OnInit {
   logout() {
     this.authService.logout().then(() => {
       console.log('User logged out');
+      this.router.navigate(['/login']);
     });
   }
 }

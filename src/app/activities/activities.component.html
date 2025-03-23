@@ -35,7 +35,7 @@
         <input
           type="text"
           [(ngModel)]="editActivityName"
-          class="form-control"
+          class="form-control w-auto me-3"
         />
       </ng-template>
       <div>
@@ -55,12 +55,27 @@
         </button>
         <button
           *ngIf="editingActivity === activity.id"
-          class="btn btn-warning btn-sm"
+          class="btn btn-warning btn-sm me-2"
           (click)="cancelEdit()"
         >
           Cancel
+        </button>
+        <button
+          class="btn btn-danger btn-sm"
+          (click)="openDeleteModal(activity)"
+        >
+          Delete
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Include the shared confirmation modal -->
+<app-confirm-modal
+  #confirmModal
+  title="Delete Activity"
+  message="Are you sure you want to delete this activity?"
+  (confirmed)="onDeleteConfirmed($event)"
+>
+</app-confirm-modal>
